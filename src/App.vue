@@ -1,11 +1,20 @@
 <template>
-  <div id="app">
+  <div id="app" style="height: 100%;">
+    <mu-appbar title="小米表单">
+      <mu-icon-button icon="menu" slot="left"/>
+      <mu-flat-button label="首页" slot="right" href="/#/"/>
+      <mu-flat-button label="填写表单" slot="right" href="/#/fill"/>
+      <mu-flat-button label="创建表单" slot="right" href="/#/create"/>
+      <mu-raised-button label="登陆" v-if="!login" slot="right" style="border-radius: 20px" secondary/>
+      <mu-flat-button label="注册" slot="right" href="/#/aaa"/>
+      <mu-flat-button label="留言" slot="right" href="/#/feedback"/>
+      <mu-icon-button icon=":fa fa-user" v-if="login" slot="right" href="/#/user"/>
+      <mu-icon-button icon=":fa fa-github" slot="right" href="https://github.com/1079805974/wjxxx/tree/master"
+                      target="_blank"/>
+    </mu-appbar>
     <router-view></router-view>
-    <el-footer>
-      <el-row type="flex" justify="center">
-        <p style="font-family:华文楷体;font-size: 16px;">Copyright ©2017 by LJR. All Rights Reserved</p>
-      </el-row>
-    </el-footer>
+    <p style="font-family:华文楷体;font-size: 16px;text-align: center" class="footer">
+      Copyright ©2017 by LJR. All Rights Reserved</p>
   </div>
 </template>
 
@@ -13,8 +22,25 @@
   export default {
     name: 'app',
     data() {
-      return {}
+      return {
+        login: false,
+      }
     },
+    methods: {},
+    mounted() {
+      var session = this.getCookie('session')
+      if (session) {
+        this.axios.get(this.$url + '/session?' + session)
+          .then(res => {
+            if (res.data.status == 'success') {
+              this.login = 'true';
+            }
+          }, error => {
+          })
+      } else {
+        this.login = false
+      }
+    }
   }
 </script>
 
@@ -23,6 +49,21 @@
     display: inline;
   }
 
+  .layout {
+    background-color: rgb(255, 255, 255);
+    min-height: 84vh;
+  }
+
+  .mu-appbar-title span {
+    float: left;
+    padding-left: 10px;
+  }
+
+  .body {
+    background-color: white;
+    border-radius: 5px;
+    min-height: 500px;
+  }
   html {
     height: 100%;
   }
@@ -53,7 +94,7 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 100px;
+    height: 20px;
   }
 
   .el-form-item__content {

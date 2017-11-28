@@ -54,7 +54,7 @@
 <script>
   //v-model="Form['checkBox'+index]" :max="data.max==0?100000:data.max" :min="data.min"
   import ElCheckboxGroup from "../../node_modules/element-ui/packages/checkbox/src/checkbox-group.vue";
-
+  import bus from '../bus.js'
   export default {
     components: {ElCheckboxGroup},
     name: 'display',
@@ -77,7 +77,7 @@
     },
     methods: {
       submit: function () {
-        this.$ajax.post(this.$url + '/table/submit', JSON.stringify(this.Form), {
+        this.axios.post(this.$url + '/table/submit', JSON.stringify(this.Form), {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -88,6 +88,25 @@
         })
       }
     },
+    created() {
+      this.FormData = bus.FormData
+      var index = 0
+      for (index in this.FormData) {
+        if (this.FormData[index].type == 'input') {
+          this.i++
+          this.Form['input' + this.i] = ''
+        } else if (this.FormData[index].type == 'radio') {
+          this.i++
+          this.Form['radio' + this.i] = ''
+        } else if (this.FormData[index].type == 'checkBox') {
+          this.i++
+          this.Form['checkBox' + this.i] = []
+          console.log(JSON.stringify(this.Form))
+        }
+        this.Form['id'] = this.FormData[0]['id']
+      }
+      console.log(this.Form)
+    },
     mounted() {
       this.clientWidth = document.documentElement.clientWidth
       const that = this
@@ -95,26 +114,9 @@
         that.clientWidth = document.documentElement.clientWidth
       }
 
-      this.$ajax.get(this.$url + '/table?id=' + this.$route.query.id, {}).then(res => {
-        console.log('服务器回复' + JSON.stringify(res.data))
-        that.FormData = res.data.slice(0)
-        var index
-        for (index in that.FormData) {
-          if (that.FormData[index].type == 'input') {
-            that.i++
-            that.Form['input' + this.i] = ''
-          } else if (that.FormData[index].type == 'radio') {
-            that.i++
-            that.Form['radio' + this.i] = ''
-          } else if (that.FormData[index].type == 'checkBox') {
-            that.i++
-            that.Form['checkBox' + this.i] = []
-          }
-          that.Form['id'] = that.FormData[0]['id']
-          console.log('Form内容' + JSON.stringify(that.Form))
-        }
-      }, err => {
-      })
+      /*if(this.FormData.length<1){
+        this.$router.push('/fill')
+      }*/
     }
   }
 </script>

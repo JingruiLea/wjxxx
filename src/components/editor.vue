@@ -84,7 +84,7 @@
     },
     methods: {
       submit() {
-        this.$ajax.post(this.$url + '/table/edit', JSON.stringify(this.Form), {
+        this.axios.post(this.$url + '/table/edit', JSON.stringify(this.Form), {
           headers: {
             'Content-Type': 'application/json'
           }
