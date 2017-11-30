@@ -106,17 +106,13 @@
         this.Form['id'] = this.FormData[0]['id']
       }
       console.log(this.Form)
+      bus.FormData = []
     },
+    computed: {},
     mounted() {
-      this.clientWidth = document.documentElement.clientWidth
-      const that = this
-      window.onresize = function temp() {
-        that.clientWidth = document.documentElement.clientWidth
-      }
-
-      /*if(this.FormData.length<1){
+      if (this.FormData.length < 1) {
         this.$router.push('/fill')
-      }*/
+      }
     }
   }
 </script>

@@ -17,12 +17,13 @@ import {delCookie, getCookie, setCookie} from "./util/util"
 Vue.use(ElementUI)
 Vue.use(MuseUI)
 
+axios.defaults.withCredentials = true
 Vue.prototype.axios = axios
 Vue.prototype.$url = 'http://127.0.0.1:3000'
 Vue.prototype.getCookie = getCookie
 Vue.prototype.setCookie = setCookie
 Vue.prototype.delCookie = delCookie
-var appp = new Vue({
+window.vue = new Vue({
   el: '#app',
   router,
   data: {},

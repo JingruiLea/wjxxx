@@ -4,6 +4,8 @@ import editor from '@/components/editor'
 import display from '@/components/display'
 import index from '@/components/index'
 import fill from '@/components/fill'
+import loginAndRegister from '@/components/loginAndRegister'
+import create from '@/components/create'
 Vue.use(Router)
 
 export default new Router({
@@ -24,14 +26,19 @@ export default new Router({
       component: index
     },
     {
-      path: '/create',
-      name: 'create',
-      component: editor
-    },
-    {
       path: '/fill',
       name: 'fill',
       component: fill
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: loginAndRegister
+    },
+    {
+      path: '/create',
+      name: 'create',
+      component: create
     },
   ], data: {
     isLogin: false

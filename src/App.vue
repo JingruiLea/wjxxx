@@ -1,15 +1,16 @@
 <template>
   <div id="app" style="height: 100%;">
-    <mu-appbar title="小米表单">
+    <mu-appbar :title="isPhone?'':'小米表单'">
       <mu-icon-button icon="menu" slot="left"/>
       <mu-flat-button label="首页" slot="right" href="/#/"/>
-      <mu-flat-button label="填写表单" slot="right" href="/#/fill"/>
-      <mu-flat-button label="创建表单" slot="right" href="/#/create"/>
-      <mu-raised-button label="登陆" v-if="!login" slot="right" style="border-radius: 20px" secondary/>
-      <mu-flat-button label="注册" slot="right" href="/#/aaa"/>
-      <mu-flat-button label="留言" slot="right" href="/#/feedback"/>
+      <mu-flat-button :label="isPhone?'填表':'填写表单'" slot="right" href="/#/fill"/>
+      <mu-flat-button :label="isPhone?'创建':'创建表单'" slot="right" href="/#/create"/>
       <mu-icon-button icon=":fa fa-user" v-if="login" slot="right" href="/#/user"/>
-      <mu-icon-button icon=":fa fa-github" slot="right" href="https://github.com/1079805974/wjxxx/tree/master"
+      <mu-raised-button :label="isPhone?'登陆/注册':'登陆'" v-else slot="right" style="border-radius: 20px"
+                        @click="$router.push('/login')" secondary/>
+      <mu-flat-button label="注册" slot="right" v-if="!isPhone&&!login" href="/#/aaa"/>
+      <mu-flat-button label="留言" slot="right" v-if="!isPhone" href="/#/feedback"/>
+      <mu-icon-button icon=":fa fa-github" v-if="!isPhone" slot="right" href="https://github.com/1079805974/wjxxx"
                       target="_blank"/>
     </mu-appbar>
     <router-view></router-view>
@@ -19,27 +20,45 @@
 </template>
 
 <script>
+  import bus from './bus.js'
   export default {
     name: 'app',
     data() {
       return {
         login: false,
+        clientWidth: 0
+      }
+    },
+    computed: {
+      isPhone() {
+        return this.clientWidth <= 768
       }
     },
     methods: {},
     mounted() {
+      const that = this
+      bus.$on('login', function (login) {
+        that.login = login
+      })
+      this.clientWidth = document.documentElement.clientWidth
+      window.onresize = function temp() {
+        that.clientWidth = document.documentElement.clientWidth
+      }
       var session = this.getCookie('session')
-      if (session) {
-        this.axios.get(this.$url + '/session?' + session)
+      // if (session) {
+      this.axios.get(this.$url + '/session?session=' + '2512b32eb995a478c673027eefe37bd4')
           .then(res => {
-            if (res.data.status == 'success') {
-              this.login = 'true';
+            if (res.data.status == 'Success') {
+              bus.login = true;
+              bus.userdata = res.data.userdata.slice(0)
+            } else {
+              bus.login = false;
             }
           }, error => {
           })
-      } else {
-        this.login = false
-      }
+      /*} else {
+        bus.login = false
+      }*/
     }
   }
 </script>
@@ -89,7 +108,6 @@
     padding: 0;
     position: relative;
   }
-
   footer {
     position: absolute;
     bottom: 0;
@@ -156,6 +174,7 @@
       width: 970px;
       height: 100%;
     }
+
   }
 
   /*@import "../static/css/style2.css";*/

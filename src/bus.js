@@ -1,9 +1,12 @@
 import Vue from 'vue';
 
-export default new Vue({
+export default window.bus = new Vue({
     data: {
       FormData: [],
-      Form: {}
+      Form: {},
+      userdata: [],
+      login: false,
+      clientWidth: 0
     },
     created() {
       const that = this
@@ -14,6 +17,23 @@ export default new Vue({
         that.FormData = FormData.slice(0)
         //console.log(that.FormData)
       })
+    },
+  methods: {
+    isPhone() {
+      return this.clientWidth <= 768
     }
+  },
+  watch: {
+    login(val) {
+      this.$emit('login', val)
+    }
+  },
+  mounted() {
+    this.clientWidth = document.documentElement.clientWidth
+    const that = this
+    window.onresize = function temp() {
+      that.clientWidth = document.documentElement.clientWidth
+    }
+  }
   }
 );

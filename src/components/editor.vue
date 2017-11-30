@@ -49,6 +49,7 @@
       <el-button class="addButton" type="primary" @click="add" round>添加</el-button>
       <el-button class="addButton" type="primary" @click="submit" round>完成</el-button>
     </el-row>
+    <mu-toast v-if="toast" :message="message" @close="hideToast"/>
   </el-container>
 </template>
 
@@ -56,24 +57,27 @@
   import etTitle from './et-title.vue'
   import etInput from './et-input.vue'
   import etLabel from './et-label.vue'
-  import ElForm from '../../node_modules/element-ui/packages/form/src/form.vue'
-  import EtPlaceholder from './et-placeholder.vue'
-  import ElHeader from "../../node_modules/element-ui/packages/header/src/main.vue";
-  import ElMain from "../../node_modules/element-ui/packages/main/src/main.vue";
-  import EtRadio from "./et-radio.vue";
-  import EtCheckbox from "./et-checkBox.vue";
-  import ElContainer from "../../node_modules/element-ui/packages/container/src/main.vue";
-  import ElCol from "../../node_modules/element-ui/packages/col/src/col";
-  import ElDialog from "../../node_modules/element-ui/packages/dialog/src/component.vue";
-  import ElFormItem from "../../node_modules/element-ui/packages/form/src/form-item.vue";
-  import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
+  import etCheckbox from './et-checkBox.vue'
+  import etRadio from './et-radio.vue'
+  import etPlaceholder from './et-placeholder.vue'
   import Vue from 'vue'
+  import bus from '../bus.js'
 
   export default {
+    components: {
+      etCheckbox,
+      etRadio,
+      etPlaceholder,
+      etTitle,
+      etInput,
+      etLabel
+    },
     name: 'app',
     data() {
       return {
-        FormData: [{title: ''},
+        toast: false,
+        message: '',
+        FormData: [{title: '110'},
           {type: 'input', note: '你的姓名', placeholder: '在此输入内容将修改背景文字', icon: 'fa fa-cube', min: 0, max: 0},
           {type: 'radio', note: '性别', choices: ['男', '女', '其他']},
           {type: 'checkBox', note: '喜欢的水果', choices: ['香蕉', '苹果', '小米'], min: 0, max: 0}],
@@ -83,15 +87,36 @@
       }
     },
     methods: {
+      showToast(message) {
+        this.message = message
+        this.toast = true
+        if (this.toastTimer) clearTimeout(this.toastTimer)
+        this.toastTimer = setTimeout(() => {
+          this.toast = false
+        }, 2000)
+      },
+      hideToast() {
+        this.toast = false
+        if (this.toastTimer) clearTimeout(this.toastTimer)
+      },
       submit() {
-        this.axios.post(this.$url + '/table/edit', JSON.stringify(this.Form), {
-          headers: {
-            'Content-Type': 'application/json'
+        bus.FormData = this.FormData.slice(0)
+        this.axios.post(this.$url + '/table/create', {
+          name: '',
+          password: this.password,
+          uuid: bus.FormData[0].id,
+          FormData: JSON.stringify(bus.FormData)
+        }).then(res => {
+          console.log(JSON.stringify(res.data))
+          if (res.data.status == 'Success') {
+            showToast('Success')
+          } else if (res.data.status == 'Failed') {
+            showToast('Failed')
+          } else if (res.data.status == 'Internal Error') {
+            showToast('Internal Error')
           }
-        }).then(response => {
-
-        }, error => {
-
+        }, err => {
+          console.log('error login.vue line-90-' + err.toString())
         })
       },
       add() {
@@ -154,21 +179,6 @@
         }
       }
     },
-    components: {
-      ElButton,
-      ElFormItem,
-      ElDialog,
-      ElCol,
-      ElContainer,
-      EtCheckbox,
-      EtRadio,
-      ElMain,
-      ElHeader,
-      EtPlaceholder,
-      ElForm,
-      etTitle,
-      etInput,
-      etLabel
-    }
+
   }
 </script>
