@@ -13,7 +13,6 @@ import 'muse-ui/dist/muse-ui.css'
 import 'muse-ui/dist/theme-light.css'
 import {delCookie, getCookie, setCookie} from "./util/util"
 
-
 Vue.use(ElementUI)
 Vue.use(MuseUI)
 

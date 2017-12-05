@@ -23,6 +23,8 @@
       </mu-step>
     </mu-stepper>
     <editor v-if="activeStep==1"/>
+    <input type="file" v-if="activeStep==0"/>
+
   </div>
 </template>
 

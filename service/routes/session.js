@@ -14,10 +14,9 @@ router.get('/', function (req, res, next) {
           res.send({status: 'Internal Error'})
           res.end()
         } else {
-          console.log('The solution0 is: ', JSON.stringify(results1[0]));
-          if (results1[0].hasOwnProperty('username')) {
+          if (results1.length >= 1) {
             var username = results1[0].username
-            connection('SELECT * from users where username=' + username + ';',
+            connection('SELECT * from users where username=' + mysql.escape(username),
               function (error, results, fields) {
                 if (error) {
                   console.log(error.toString())

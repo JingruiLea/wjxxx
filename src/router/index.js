@@ -4,8 +4,10 @@ import editor from '@/components/editor'
 import display from '@/components/display'
 import index from '@/components/index'
 import fill from '@/components/fill'
-import loginAndRegister from '@/components/loginAndRegister'
+import login from '@/components/login'
+import register from '@/components/register'
 import create from '@/components/create'
+import feedback from '@/components/feedback'
 Vue.use(Router)
 
 export default new Router({
@@ -33,7 +35,17 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: loginAndRegister
+      component: login,
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: register,
+    },
+    {
+      path: '/feedback',
+      name: 'feedback',
+      component: feedback,
     },
     {
       path: '/create',

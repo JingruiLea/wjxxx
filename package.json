@@ -17,11 +17,14 @@
     "axios": "^0.17.1",
     "easy-mysql": "^1.0.3",
     "element-ui": "^2.0.5",
+    "highlight.js": "^9.12.0",
+    "marked": "^0.3.7",
     "muse-ui": "^2.1.0",
     "mysql": "^2.15.0",
     "node-mysql": "^0.4.2",
     "vue": "^2.5.9",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "wangeditor": "^3.0.15"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

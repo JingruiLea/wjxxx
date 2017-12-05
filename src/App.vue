@@ -8,7 +8,7 @@
       <mu-icon-button icon=":fa fa-user" v-if="login" slot="right" href="/#/user"/>
       <mu-raised-button :label="isPhone?'登陆/注册':'登陆'" v-else slot="right" style="border-radius: 20px"
                         @click="$router.push('/login')" secondary/>
-      <mu-flat-button label="注册" slot="right" v-if="!isPhone&&!login" href="/#/aaa"/>
+      <mu-flat-button label="注册" slot="right" v-if="!isPhone&&!login" href="/#/register"/>
       <mu-flat-button label="留言" slot="right" v-if="!isPhone" href="/#/feedback"/>
       <mu-icon-button icon=":fa fa-github" v-if="!isPhone" slot="right" href="https://github.com/1079805974/wjxxx"
                       target="_blank"/>
@@ -40,9 +40,10 @@
       bus.$on('login', function (login) {
         that.login = login
       })
+      const that2 = this
       this.clientWidth = document.documentElement.clientWidth
       window.onresize = function temp() {
-        that.clientWidth = document.documentElement.clientWidth
+        that2.clientWidth = document.documentElement.clientWidth
       }
       var session = this.getCookie('session')
       // if (session) {
@@ -79,12 +80,13 @@
   }
 
   .body {
-    background-color: white;
+
     border-radius: 5px;
     min-height: 500px;
   }
   html {
     height: 100%;
+
   }
 
   hr {
@@ -146,8 +148,14 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+
   }
 
+  .el-main {
+    min-height: 70vh;
+    margin-top: 30px;
+    padding-bottom: 60px
+  }
   .el-container {
     height: 100%;
     padding-right: 15px;
@@ -156,10 +164,8 @@
     margin-left: auto;
   }
 
-  .el-main {
-    min-height: 70vh;
-    margin-top: 30px;
-    padding-bottom: 60px
+  .mu-flat-button {
+    text-transform: none;
   }
 
   @media (min-width: 768px) {

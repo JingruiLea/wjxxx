@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var tables = require('./routes/tables');
 var session = require('./routes/session')
+var user = require('./routes/user')
 
 var app = express();
 
@@ -24,7 +25,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use(function (req, res, next) {
-  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Origin", "http://localhost:8080");
   res.set("Access-Control-Allow-Headers", "X-Requested-With, accept, origin, content-type");
   res.set("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
   res.set("X-Powered-By", ' 3.2.1')
@@ -35,6 +36,7 @@ app.use(function (req, res, next) {
 app.use('/', index);
 app.use('/table', tables);
 app.use('/session', session);
+app.use('/user', user)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
