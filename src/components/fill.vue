@@ -40,7 +40,12 @@
     },
     methods: {
       keyUp() {
-        if (this.inputValue != '') {
+        if (this.inputValue === '10086110') {
+          this.needPassword = true
+        } else {
+          this.needPassword = false
+        }
+        /*if (this.inputValue != '') {
           this.axios.post(this.$url + '/table/needPassword', {idOrName: this.inputValue}).then(res => {
             console.log(res.data.status == 'Success')
             console.log(JSON.stringify(res.data))
@@ -64,7 +69,7 @@
           }, err => {
             console.log('error fill.vue line-36-' + err.toString())
           })
-        }
+        }*/
       },
       next() {
         if (this.inputValue == '') {
@@ -79,23 +84,32 @@
         } else {
           this.passwordErrorText = ''
         }
-        this.axios.post(this.$url + '/table', {idOrName: this.inputValue, password: this.password}).then(res => {
-          console.log(JSON.stringify(res.data))
-          if (res.data.status == 'Success') {
-            bus.$emit('display', res.data.FormData)
-            this.$router.push('display')
-          } else if (res.data.status == 'Password Error') {
-            this.passwordErrorText = '密码错误'
-          } else if (res.data.status == 'Internal Error') {
-            this.idOrNameErrorText = '服务器错误，请联系作者'
-          } else {
-            this.passwordErrorText = ''
+        /* this.axios.post(this.$url + '/table', {idOrName: this.inputValue, password: this.password}).then(res => {
+           console.log(JSON.stringify(res.data))
+           if (res.data.status == 'Success') {
+             bus.$emit('display', res.data.FormData)
+             this.$router.push('display')
+           } else if (res.data.status == 'Password Error') {
+             this.passwordErrorText = '密码错误'
+           } else if (res.data.status == 'Internal Error') {
+             this.idOrNameErrorText = '服务器错误，请联系作者'
+           } else {
+             this.passwordErrorText = ''
+           }
+         }, err => {
+           this.idOrNameErrorText = '服务器错误，请联系作者'
+           console.log('error fill.vue line-43-' + err.toString())
+         })*/
+        const that = this
+        bus.fill({id: this.inputValue, password: this.password}, function (res) {
+          if (res === 'Password Error') {
+            that.passwordErrorText = '密码错误'
+          } else if (res === 'Not Found') {
+            that.idOrNameErrorText = '没有此表单'
+          } else if (res === 'Success') {
+            that.$router.push('display')
           }
-        }, err => {
-          this.idOrNameErrorText = '服务器错误，请联系作者'
-          console.log('error fill.vue line-43-' + err.toString())
         })
-
       }
     }
   }

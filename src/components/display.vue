@@ -101,11 +101,9 @@
         } else if (this.FormData[index].type == 'checkBox') {
           this.i++
           this.Form['checkBox' + this.i] = []
-          console.log(JSON.stringify(this.Form))
         }
         this.Form['id'] = this.FormData[0]['id']
       }
-      console.log(this.Form)
       bus.FormData = []
     },
     computed: {},

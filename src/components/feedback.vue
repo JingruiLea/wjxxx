@@ -18,9 +18,9 @@
           <transition name="fade2" mode="out-in">
             <div v-if="!notepadVisible" key="1">
               <mu-flat-button label="写留言" icon=":fa fa-pencil-square-o" @click="leaveNote" primary/>
+              <mu-flat-button label="写博客" icon=":fa fa-pencil-square-o" @click="leaveNote" primary/>
               <mu-flat-button label="写留言" icon=":fa fa-pencil-square-o" @click="leaveNote" primary/>
-              <mu-flat-button label="写留言" icon=":fa fa-pencil-square-o" @click="leaveNote" primary/>
-              <mu-flat-button label="写留言" icon=":fa fa-pencil-square-o" @click="leaveNote" primary/>
+              <mu-flat-button label="写博客" icon=":fa fa-pencil-square-o" @click="leaveNote" primary/>
             </div>
             <div v-else key="2" style="text-align: justify">
               <h3 style="display: inline">{{editStatus != 'Markdown' ? '普通编辑器   ' : 'Markdown编辑器   '}}</h3>
@@ -103,6 +103,7 @@
     },
     methods: {
       submitPassage() {
+        console.log(this.editorContent)
         this.axios.post(this.$url + '/feedback/addNote', {username: this.inputValue, note: ''})
           .then(res => {
             console.log(res.data.status == 'Success')
@@ -169,6 +170,11 @@
     font-size: 32px;
     padding-bottom: 0;
     margin: auto;
+  }
+
+  #preview hr {
+    height: 1px;
+    border-top: 1px solid #000;
   }
 
   pre {

@@ -5,8 +5,11 @@
       <mu-flat-button label="首页" slot="right" href="/#/"/>
       <mu-flat-button :label="isPhone?'填表':'填写表单'" slot="right" href="/#/fill"/>
       <mu-flat-button :label="isPhone?'创建':'创建表单'" slot="right" href="/#/create"/>
-      <mu-icon-button icon=":fa fa-user" v-if="login" slot="right" href="/#/user"/>
-      <mu-raised-button :label="isPhone?'登陆/注册':'登陆'" v-else slot="right" style="border-radius: 20px"
+      <!--mu-icon-button icon=":fa fa-user" v-if="login" slot="right" href="/#/user"/-->
+      <a href="/#/user" slot="right" v-if="login">
+        <mu-avatar slot="right" :src="profile"/>
+      </a>
+      <mu-raised-button :label="isPhone?'登录/注册':'登录'" v-else slot="right" style="border-radius: 20px"
                         @click="$router.push('/login')" secondary/>
       <mu-flat-button label="注册" slot="right" v-if="!isPhone&&!login" href="/#/register"/>
       <mu-flat-button label="留言" slot="right" v-if="!isPhone" href="/#/feedback"/>
@@ -26,28 +29,30 @@
     data() {
       return {
         login: false,
-        clientWidth: 0
+        clientWidth: 0,
+        profile: ''
       }
     },
     computed: {
       isPhone() {
         return this.clientWidth <= 768
-      }
+      },
     },
     methods: {},
     mounted() {
       const that = this
       bus.$on('login', function (login) {
         that.login = login
+        that.profile = bus.userdata.profile
       })
       const that2 = this
       this.clientWidth = document.documentElement.clientWidth
       window.onresize = function temp() {
         that2.clientWidth = document.documentElement.clientWidth
       }
-      var session = this.getCookie('session')
+      // var session = this.getCookie('session')
       // if (session) {
-      this.axios.get(this.$url + '/session?session=' + '2512b32eb995a478c673027eefe37bd4')
+      /*this.axios.get(this.$url + '/session?session=' + '2512b32eb995a478c673027eefe37bd4')
           .then(res => {
             if (res.data.status == 'Success') {
               bus.login = true;
@@ -57,7 +62,7 @@
             }
           }, error => {
           })
-      /*} else {
+      } else {
         bus.login = false
       }*/
     }

@@ -5,7 +5,6 @@ import App from './App'
 
 import router from './router'
 import axios from 'axios'
-Vue.config.productionTip = false
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import MuseUI from 'muse-ui'
@@ -15,6 +14,7 @@ import {delCookie, getCookie, setCookie} from "./util/util"
 
 Vue.use(ElementUI)
 Vue.use(MuseUI)
+Vue.config.productionTip = false
 
 axios.defaults.withCredentials = true
 Vue.prototype.axios = axios

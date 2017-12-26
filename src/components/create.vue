@@ -22,18 +22,23 @@
         </mu-step-label>
       </mu-step>
     </mu-stepper>
-    <editor v-if="activeStep==1"/>
+    <editor v-if="activeStep==1" @next="++activeStep"/>
     <input type="file" v-if="activeStep==0"/>
-
+    <setting v-if="activeStep==2" @next="++activeStep"/>
+    <done v-if="activeStep==3"/>
   </div>
 </template>
 
 <script>
   import bus from '../bus.js'
   import editor from './editor.vue'
+  import Setting from "./setting.vue";
+  import Done from "./done.vue";
 
   export default {
     components: {
+      Done,
+      Setting,
       editor
     },
     name: 'create',

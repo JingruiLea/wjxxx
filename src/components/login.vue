@@ -26,18 +26,19 @@
         activeTab: 'login'
       }
     },
-    computed: {}
+    computed: {
+      isLogin() {
+        return this.activeTab == 'login'
+      }
+    },
+    methods: {
+      handleTabChange(val) {
+        this.activeTab = val
+      }
+    }
   }
 </script>
-isLogin() {
-return this.activeTab == 'login'
-}
-},
-methods: {
-handleTabChange(val) {
-this.activeTab = val
-},
-}
+
 <style>
   .mu-tabs .mu-tab-text {
     color: #ffffff;

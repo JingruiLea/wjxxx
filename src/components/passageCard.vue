@@ -1,17 +1,29 @@
 <template>
   <div @mouseenter="closeVisible=true" @mouseleave="closeVisible=false" style="position: relative;text-align: justify;">
     <mu-paper class="in-list" :zDepth="1" v-if="titleVisible">
-      <a class="dislike" href="/#/feedback" v-show="closeVisible" @click="titleVisible=!titleVisible">不喜欢</a>
-      <mu-content-block>
-        <div style="position: relative;margin-right: 9px;margin-bottom: 15px">
-          <div style="margin-top: 16px;">
-            <mu-avatar slot="left" src="http://upload-images.jianshu.io/upload_images/2542851-04e9a0baba4841d1.jpg"/>
-            <h3 style="display: inline;position: absolute;top: 0;margin: 0;padding-left: 15px">{{username}}</h3>
+      <mu-content-block style="display: inline-block">
+        <a class="dislike" href="/#/feedback" v-show="closeVisible" @click="titleVisible=!titleVisible">隐藏此条</a>
+        <div style="position: relative;margin-right: 55px;margin-bottom: 15px;">
+          <div style="margin-top: 10px;">
+            <a class="passageTitle" :href="userAddress">
+              <mu-avatar slot="left" :src="userIcon"/>
+            </a>
+            <h3 style="display: inline;position: absolute;top: 0;margin: 0;padding-left: 15px"><a class="passageTitle"
+                                                                                                  :href="userAddress">{{username}}</a>
+            </h3>
             <p style="position: absolute;display: inline;padding-left: 15px;top:24px;margin: 0;">{{signature}}</p>
           </div>
-          <a class="passageTitle" :href="passageAddress"><h3>田园猫的颜值可以多高？</h3></a>
-          <p style="color: #24292e;">
-            2017年9月28日 晚上九点多，加班的室友卡卡终于回家了，她看到门槛上一团毛绒绒的白色，还以为是谁把不要的玩具扔家门口了。 “喂，有只猫跑进来了！” 我听到卡卡的声音，马上跑到门口。 只见一只巴掌大的白色小…</p>
+          <div>
+            <h2 style="margin-top: 10px;margin-bottom: 10px;"><a class="passageTitle" :href="passageAddress">{{passageTitle}}</a>
+            </h2>
+            <div v-if="passageFirstImg||passageAudio" class="media">
+              <img style="height: 100%;width: 100%;display: block;" :src="passageFirstImg"/>
+            </div>
+            <a :href="passageAddress"><p class="passageContent"
+                                         style="color: #24292e;display: inline; font-size: 15px;">
+              {{passageContent}}
+            </p></a>
+          </div>
         </div>
       </mu-content-block>
     </mu-paper>
@@ -23,27 +35,58 @@
     name: 'passageCard',
     data() {
       return {
+        userAddress: this.passage.userAddress,
+        userIcon: this.passage.userIcon,
         closeVisible: false,
         titleVisible: true,
-        username: '李井瑞',
-        signature: '我的个性签名',
-        userAvatar: '',
-        passageTitle: '文章标题',
-        passageAddress: 'http://www.baidu.com'
+        passageAudio: this.passage.passageAudio,
+        username: this.passage.username,
+        signature: this.passage.signature,
+        passageTitle: this.passage.passageTitle,
+        passageAddress: this.passage.passageAddress,
+        passageTitle: this.passage.passageTitle,
+        passageFirstImg: this.passage.passageFirstImg,
+        passageContent: this.passage.passageContent
       }
     },
+    props: ['passage'],
     methods: {},
   }
 </script>
 
 <style>
   .dislike {
-    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
     text-decoration: none;
     margin-right: 15px;
     margin-top: 10px;
+    color: #9fadc7;
+    display: inline;
   }
 
+  .dislike:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .media {
+    position: relative;
+    display: block;
+    width: 190px;
+    height: 105px;
+    margin-top: -2px;
+    margin-right: 18px;
+    margin-bottom: 4px;
+    float: left;
+    overflow: hidden;
+    background-position: 50%;
+    background-size: cover;
+    border-radius: 4px;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
   .passageTitle {
     color: black;
     text-decoration: none;
@@ -52,6 +95,11 @@
   .passageTitle:hover {
     color: black;
     text-decoration: underline;
+
   }
 
+  .passageContent:hover {
+    opacity: 0.7;
+    cursor: pointer;
+  }
 </style>

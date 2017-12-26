@@ -1,5 +1,28 @@
 <template>
   <el-container>
+    <el-row>
+      <el-col :xs="24" :md="8">
+        <el-radio-group class="addSelect" v-model="selectValue">
+          <el-radio :label="1">单选</el-radio>
+          <el-radio :label="2">多选</el-radio>
+          <el-radio :label="3">填空</el-radio>
+        </el-radio-group>
+      </el-col>
+      <transition name="el-zoom-in-top">
+        <el-col :xs="24" :ls="12" :span="12" :md="6" class="addInput" v-show="selectValue=='2'||selectValue=='3'">
+          <label class="addLabel">{{minLabel}}</label>
+          <el-input-number v-model="minnum" controls-position="right" size="medium" :min="0"></el-input-number>
+        </el-col>
+      </transition>
+      <transition name="el-zoom-in-top">
+        <el-col :xs="24" :span="12" :ls="12" :md="6" class="addInput" v-show="selectValue=='2'||selectValue=='3'">
+          <label class="addLabel">{{maxLabel}}</label>
+          <el-input-number v-model="maxnum" controls-position="right" size="medium" :min="0"></el-input-number>
+        </el-col>
+      </transition>
+      <el-button class="addButton" type="primary" @click="add" round>添加</el-button>
+      <el-button class="addButton" type="primary" @click="submit" round>完成</el-button>
+    </el-row>
     <el-header>
       <et-title :title.sync="FormData[0].title"/>
     </el-header>
@@ -26,29 +49,6 @@
         </el-col>
       </el-form>
     </el-main>
-    <el-row>
-      <el-col :xs="24" :md="8">
-        <el-radio-group class="addSelect" v-model="selectValue">
-          <el-radio :label="1">单选</el-radio>
-          <el-radio :label="2">多选</el-radio>
-          <el-radio :label="3">填空</el-radio>
-        </el-radio-group>
-      </el-col>
-      <transition name="el-zoom-in-top">
-        <el-col :xs="24" :ls="12" :span="12" :md="6" class="addInput" v-show="selectValue=='2'||selectValue=='3'">
-          <label class="addLabel">{{minLabel}}</label>
-          <el-input-number v-model="minnum" controls-position="right" size="medium" :min="0"></el-input-number>
-        </el-col>
-      </transition>
-      <transition name="el-zoom-in-top">
-        <el-col :xs="24" :span="12" :ls="12" :md="6" class="addInput" v-show="selectValue=='2'||selectValue=='3'">
-          <label class="addLabel">{{maxLabel}}</label>
-          <el-input-number v-model="maxnum" controls-position="right" size="medium" :min="0"></el-input-number>
-        </el-col>
-      </transition>
-      <el-button class="addButton" type="primary" @click="add" round>添加</el-button>
-      <el-button class="addButton" type="primary" @click="submit" round>完成</el-button>
-    </el-row>
     <mu-toast v-if="toast" :message="message" @close="hideToast"/>
   </el-container>
 </template>
@@ -72,18 +72,21 @@
       etInput,
       etLabel
     },
+    props: ['id'],
     name: 'app',
     data() {
       return {
         toast: false,
         message: '',
-        FormData: [{title: '110'},
-          {type: 'input', note: '你的姓名', placeholder: '在此输入内容将修改背景文字', icon: 'fa fa-cube', min: 0, max: 0},
-          {type: 'radio', note: '性别', choices: ['男', '女', '其他']},
-          {type: 'checkBox', note: '喜欢的水果', choices: ['香蕉', '苹果', '小米'], min: 0, max: 0}],
         selectValue: 0,
         minnum: 0,
-        maxnum: 0
+        maxnum: 0,
+        FormData: [
+          {title: '1603校级获奖情况统计表', id: '10086110'},
+          {type: 'input', note: '你的姓名', placeholder: '在此输入内容将修改背景文字', icon: 'fa fa-cube', min: 0, max: 0},
+          {type: 'radio', note: '性别', choices: ['男', '女', '其他']},
+          {type: 'checkBox', note: '喜欢的水果', choices: ['香蕉', '苹果', '小米'], min: 0, max: 0},
+        ]
       }
     },
     methods: {
@@ -100,25 +103,28 @@
         if (this.toastTimer) clearTimeout(this.toastTimer)
       },
       submit() {
-        bus.FormData = this.FormData.slice(0)
-        this.axios.post(this.$url + '/table/create', {
-          name: '',
-          password: this.password,
-          uuid: bus.FormData[0].id,
-          FormData: JSON.stringify(bus.FormData)
-        }).then(res => {
-          console.log(JSON.stringify(res.data))
-          if (res.data.status == 'Success') {
-            showToast('Success')
-          } else if (res.data.status == 'Failed') {
-            showToast('Failed')
-          } else if (res.data.status == 'Internal Error') {
-            showToast('Internal Error')
-          }
-        }, err => {
-          console.log('error login.vue line-90-' + err.toString())
-        })
+        this.$emit('next')
       },
+      /*submit() {
+         bus.FormData = this.FormData.slice(0)
+         this.axios.post(this.$url + '/table/create', {
+           name: '',
+           password: this.password,
+           uuid: bus.FormData[0].id,
+           FormData: JSON.stringify(bus.FormData)
+         }).then(res => {
+           console.log(JSON.stringify(res.data))
+           if (res.data.status == 'Success') {
+             showToast('Success')
+           } else if (res.data.status == 'Failed') {
+             showToast('Failed')
+           } else if (res.data.status == 'Internal Error') {
+             showToast('Internal Error')
+           }
+         }, err => {
+           console.log('error login.vue line-90-' + err.toString())
+         })
+       },*/
       add() {
         var radio = {type: 'radio', note: '性别', choices: ['男', '女', '其他']}
         var checkBox = {type: 'checkBox', note: '喜欢的水果', choices: ['香蕉', '苹果', '小米'], min: 0, max: 0}
@@ -179,6 +185,5 @@
         }
       }
     },
-
   }
 </script>

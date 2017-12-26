@@ -8,14 +8,18 @@ import login from '@/components/login'
 import register from '@/components/register'
 import create from '@/components/create'
 import feedback from '@/components/feedback'
+import passage from '@/components/passage'
+import user from '@/components/user'
+
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/editor',
+      path: '/editor/:id',
       name: 'editor',
-      component: editor
+      component: editor,
+      props: true
     },
     {
       path: '/display',
@@ -51,6 +55,16 @@ export default new Router({
       path: '/create',
       name: 'create',
       component: create
+    },
+    {
+      path: '/passage',
+      name: 'passage',
+      component: passage
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: user
     },
   ], data: {
     isLogin: false

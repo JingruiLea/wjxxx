@@ -31,8 +31,8 @@
     data() {
       return {
         rememberMe: false,
-        inputValue: '',
-        password: '',
+        inputValue: 'admin',
+        password: 'admin',
         needPassword: false,
         passwordErrorText: '',
         notFound: false,
@@ -41,7 +41,7 @@
     },
     methods: {
       keyUp() {
-        if (this.inputValue != '') {
+        /*if (this.inputValue != '') {
           this.axios.post(this.$url + '/user/needPassword', {username: this.inputValue}).then(res => {
             console.log(res.data.status == 'Success')
             console.log(JSON.stringify(res.data))
@@ -60,7 +60,11 @@
           }, err => {
             console.log('error login.vue line-90-' + err.toString())
           })
-        }
+        }*/
+        const that = this
+        bus.$emit('needPassword', this.inputValue, function back(val) {
+          that.needPassword = val
+        })
       },
       login() {
         if (this.inputValue == '') {
@@ -75,7 +79,7 @@
         } else {
           this.passwordErrorText = ''
         }
-        this.axios.post(this.$url + '/user/login', {
+        /*this.axios.post(this.$url + '/user/login', {
           username: this.inputValue,
           password: this.password,
           rememberMe: this.rememberMe
@@ -92,8 +96,13 @@
         }, err => {
           this.passwordErrorText = '服务器错误，请联系作者'
           console.log('error login.vue line-119-' + err.toString())
+        })*/
+        const that = this
+        bus.login({username: this.inputValue, password: this.password}, function (res) {
+          if (res === true) {
+            that.$router.replace('/user')
+          }
         })
-
       }
     }
   }
